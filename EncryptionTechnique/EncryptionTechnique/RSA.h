@@ -14,7 +14,7 @@ namespace EncryptionSequence
       EncryptionSequence::ull prime0, prime1;
       EncryptionSequence::ull cryptMod;     // = prime0 * prime1
       EncryptionSequence::ull eulerTotient; // = encryptMod - (prime0 + prime1 - 1)
-      EncryptionSequence::ull publicKey;    // = 1 < publicKey < eulerTotient && gcd(publicKey, eulerTotient) = 1
+      EncryptionSequence::ull publicKey;    // = [1 < publicKey < eulerTotient] && gcd(publicKey, eulerTotient) = 1
       EncryptionSequence::ull privateKey;   // = congruent modulo => privateKey * publicKey == 1 mod eulerTotient, solve for privateKey
 
     public:
