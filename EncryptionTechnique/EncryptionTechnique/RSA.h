@@ -11,13 +11,18 @@ namespace EncryptionSequence
   {
     private:
       int padScheme;
-      EncryptionSequence::ull prime0, prime1;
-      EncryptionSequence::ull cryptMod;     // = prime0 * prime1
-      EncryptionSequence::ull eulerTotient; // = encryptMod - (prime0 + prime1 - 1)
-      EncryptionSequence::ull publicKey;    // = [1 < publicKey < eulerTotient] && gcd(publicKey, eulerTotient) = 1
-      EncryptionSequence::ull privateKey;   // = congruent modulo => privateKey * publicKey == 1 mod eulerTotient, solve for privateKey
+      ull prime0, prime1;
+      ull cryptMod;     // = prime0 * prime1
+      ull eulerTotient; // = cryptMod - (prime0 + prime1 - 1)
+      ull publicKey;    // = [1 < publicKey < eulerTotient] && gcd(publicKey, eulerTotient) = 1
+      ull privateKey;   // = congruent modulo => privateKey * publicKey == 1 mod eulerTotient, solve for privateKey
+
+      ull CalculateGCD(ull a, ull b);
+      ull DetermineValidPublicKey();
+      ull DetermineValidPrivateKey();
 
     public:
+      RSA(ull prime0, ull prime1);
       /*
         1) process message into individual bytes of length padScheme
             - M into m => [0 <= m < cryptMod]
