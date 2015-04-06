@@ -26,5 +26,8 @@
     <ClInclude Include="PrimeFactorization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RSA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
