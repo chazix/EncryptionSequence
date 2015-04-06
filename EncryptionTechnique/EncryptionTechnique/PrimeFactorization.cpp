@@ -1,31 +1,34 @@
 #include <iostream>
-#include <vector>
 #include <sstream>
 #include <string>
-#include <fstream>
-#include <conio.h>
 #include <ctime>
-#include <utility>
+#include "PrimeFactorization.h"
 
-std::vector<int> primes;
-std::vector<std::pair<int, int> > possibleVals;
-double goldenRatio = (1.0 + sqrt(5)) / 2.0;
+static const double goldenRatio = (1.0 + sqrt(5)) / 2.0;
 
-void determinePrimes(const int thePrime, std::vector<int>& primePlace)
+// PRIVATE
+
+void EncryptionSequence::PrimeFactor::DeterminePrimes(const ull thePrime)
 {
-  int prime = static_cast<int>(ceil(goldenRatio * sqrt(thePrime)));
+  ull prime = static_cast<ull>(ceil(goldenRatio * sqrt(thePrime)));
 
   while (prime > 1)
   {
-    int checkPrime = prime;
+    ull checkPrime = prime;
 
-    int startPrime  = static_cast<int>(ceil(goldenRatio * sqrt(checkPrime)));
+    ull startPrime = static_cast<ull>(ceil(goldenRatio * sqrt(checkPrime)));
+    // make sure the startPrime isn't the same as the base prime we're checking against
+    startPrime = startPrime == prime ? startPrime - 1 : startPrime;
     bool validPrime = false;
 
     // determine what is prime
     while (checkPrime % startPrime != 0)
     {
       --startPrime;
+      // make sure the startPrime isn't the same as the checkPrime we're comparing
+      // the startPrime might initially be greater than the checkPrime
+      // (kind of messy)
+      startPrime = startPrime == checkPrime ? startPrime - 1 : startPrime;
 
       if (startPrime == 1)
       {
@@ -34,46 +37,59 @@ void determinePrimes(const int thePrime, std::vector<int>& primePlace)
       }
     }
 
-    if (validPrime)
+    if (validPrime || startPrime == 1)
     {
-      primes.push_back(checkPrime);
+      this->primes.push_back(checkPrime);
     }
 
     --prime;
 
-    // a prime is never even
-    while (prime % 2 == 0)
+    // a prime is never even, but a prime is 2
+    while (prime % 2 == 0 && prime != 2)
       --prime;
   }
 
-  std::cout << "Found : " << primes.size() << " Primes That May Make Up " << thePrime << "\n";
+  std::cout << "\nFound : " << this->primes.size() << " Primes That May Make Up " << thePrime << "\n";
 }
 
-void FactorPrime(const int toFactorPrime, const int charLen)
+// END PRIVATE
+
+// PUBLIC
+
+void EncryptionSequence::PrimeFactor::FactorPrime(const ull toFactorPrime, const int charLen)
 {
   std::stringstream greatestDigit;
   greatestDigit << toFactorPrime;
 
-  determinePrimes(toFactorPrime, primes);
+  DeterminePrimes(toFactorPrime);
 
   time_t startTime;
   time(&startTime);
 
-  for (unsigned i = 0; i < primes.size(); ++i)
-  {
-    int prime = primes[i];
-    for (unsigned j = i; j < primes.size(); ++j)
-    {
-      int primeVal = prime * primes[j];
-      std::stringstream ss;
-      ss << primeVal;
+  unsigned foundPrimes = this->primes.size();
 
-      // not going to be any other larger primes beyond this one
-      // multiplied with this one
-      if (ss.str().size() != charLen)
+  for (unsigned i = 0; i < foundPrimes; ++i)
+  {
+    ull prime = this->primes[i];
+    bool broke = false;
+    for (unsigned j = i; j < foundPrimes; ++j)
+    {
+      ull primeVal = prime * this->primes[j];
+
+      // This causes noticeable slowdown instead of just elapsing
+      /*if (charLen != 0)
       {
-        break;
-      }
+        std::stringstream ss;
+        ss << primeVal;
+
+        // not going to be any other larger primes beyond this one
+        // multiplied with this one
+        if (ss.str().size() != charLen)
+        {
+          break;
+          broke = true;
+        }
+      }*/
 
       // we've eliminated what we don't want
 
@@ -86,16 +102,38 @@ void FactorPrime(const int toFactorPrime, const int charLen)
         time(&endTime);
         double timeTaken = difftime(endTime, startTime);
 
-        std::cout << "Found Prime Factors : [p] = " << prime << " | [q] = " << primes[j] << std::endl;
+        std::cout << "\nFound Prime Factors : [p] = " << prime << " | [q] = " << this->primes[j] << std::endl;
         std::cout << "Time Taken To Factor Prime : " << timeTaken << " seconds" << std::endl;
 
         return;
       }
     }
   }
+
+  std::cout << "\nFound : No Two Primes That Make Up : " << toFactorPrime << std::endl;
 }
 
-int main(int argc, char* argv[])
+// END PUBLIC
+
+void EncryptionSequence::DoPrimeFactor()
 {
-  return 0;
+  std::string inputNumber, foundNumber;
+  std::cout << "What Number Do You Want To Factor?\n:";
+  std::getline(std::cin, inputNumber);
+
+  // parse the inputted number for only numbers
+  unsigned stringSize = inputNumber.size();
+  for (unsigned i = 0; i <= stringSize; ++i)
+  {
+    if ((inputNumber[i] >= '0' && inputNumber[i] <= '9'))
+    {
+      foundNumber += inputNumber[i];
+    }
+  }
+
+  EncryptionSequence::PrimeFactor pFactor;
+  pFactor.FactorPrime(std::stoull(foundNumber), stringSize);
+
+  std::cout << "\nPress Enter To Continue";
+  getchar();
 }

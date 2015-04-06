@@ -5,3 +5,5 @@
 *.pdb
 *.sdf
 *.suo
+*.obj
+*.idb
