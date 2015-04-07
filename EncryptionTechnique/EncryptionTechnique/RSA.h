@@ -1,3 +1,10 @@
+/*!
+  \author Chase Hutchens
+
+  \brief
+    RSA object definitions utilizing unsigned long long and std::string
+*/
+
 #ifndef _RSA_H_INCLUDED_
 #define _RSA_H_INCLUDED_
 
@@ -30,7 +37,7 @@ namespace EncryptionSequence
       std::string ParseToData(const std::vector<ull>& decryptedData);
 
     public:
-      RSA(ull prime0, ull prime1, int padScheme);
+      RSA(const ull prime0, const ull prime1, const int padScheme);
       /*
         1) process message into individual bytes of length padScheme
             - M into m => [0 <= m < cryptMod]

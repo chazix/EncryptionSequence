@@ -1,3 +1,11 @@
+/*! 
+  \author Chase Hutchens 
+
+  \brief
+    This utilizes the RSA algorithm for encrypting and decryption std::string
+    data
+ */
+
 #include <iostream>
 #include <sstream>   /* stringstream */
 #include <algorithm> /* transform */
@@ -10,6 +18,8 @@ namespace EncryptionSequence
   // tilde represents unknown character
   // index number represents id byte for usage during encryption
   // just need to make sure to keep everything the size of the padScheme
+  // - we may only have < 100 index values currently with the way this is setup
+  // - each piece is identified by 2 digits
   static const byte dataValues[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                                      'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7',
@@ -151,15 +161,21 @@ namespace EncryptionSequence
   }
 
   // converts the std::vector<ull> to the byte string data
+  // traverses backwards a long each ull, the reason for this is because it
+  // allows us to easily determine if we are on the last digit, because
+  // the last digit may only contain 1 # instead of the 2 #s between parsing
   std::string RSA::ParseToData(const std::vector<ull>& decryptedData)
   {
-    std::string convertedData;
+    std::string convertedData; // where we will place our decrypted data
 
-    for (auto data : decryptedData)
+    // each ull in decryptedData
+    for (auto& data : decryptedData)
     {
+      // since we are traversing backwards we are placing these in a stack
+      // so that when we pop the stack we receive our normal text
       std::stack<byte> foundDecryptedData;
       std::stringstream stream;
-      stream << data;
+      stream << data; // convert the number to the string for parsing
       std::string number = stream.str();
       
       // we are traversing in reverse order
@@ -169,7 +185,8 @@ namespace EncryptionSequence
       {
         std::string foundValue;
 
-        if (it + 1 == number.rend()) // last digit
+        // last digit is singular
+        if (it + 1 == number.rend())
         {
           foundValue += *it;
           foundDecryptedData.push(this->NumValueToByteData(std::stoi(foundValue)));
@@ -183,7 +200,7 @@ namespace EncryptionSequence
         }
       }
 
-      // need to reorder
+      // place re-ordered data
       while (!foundDecryptedData.empty())
       {
         convertedData += foundDecryptedData.top();
@@ -211,22 +228,22 @@ namespace EncryptionSequence
     ideally a mid range
     */
   /*****************************************************************************/
-  RSA::RSA(ull prime0, ull prime1, int padScheme)
+  RSA::RSA(const ull prime0, const ull prime1, const int padScheme)
   {
-    this->padScheme = padScheme;
-    this->prime0 = prime0;
-    this->prime1 = prime1;
-    this->cryptMod = prime0 * prime1;
+    this->padScheme    = padScheme;
+    this->prime0       = prime0;
+    this->prime1       = prime1;
+    this->cryptMod     = prime0 * prime1;
     this->eulerTotient = this->cryptMod - (prime0 + prime1 - 1);
-    this->publicKey = this->DetermineValidPublicKey();
-    this->privateKey = this->DetermineValidPrivateKey();
+    this->publicKey    = this->DetermineValidPublicKey();
+    this->privateKey   = this->DetermineValidPrivateKey();
 
-    std::cout << "Test Pow\n";
-    std::cout << this->CalculateModularPow(27856, 5689, 563879) << std::endl;
+    //std::cout << "Test Pow\n";
+    //std::cout << this->CalculateModularPow(27856, 5689, 563879) << std::endl;
 
-    std::cout << "Test Encrypt\n";
-    auto encrypted = this->EncryptData("Testing Interesting Things");
-    auto decrypted = this->DecryptData(encrypted);
+    //std::cout << "Test Encrypt\n";
+    //auto encrypted = this->EncryptData("Testing Interesting Things");
+    //auto decrypted = this->DecryptData(encrypted);
   }
 
   /*
@@ -250,6 +267,10 @@ namespace EncryptionSequence
     return encryptedPieces;
   }
 
+  /*
+    1) congruent modulo => decrypted_message == encrypted_message^privateKey mod cryptMod
+    2) reverse the pad scheme
+  */
   std::string RSA::DecryptData(const std::vector<ull>& toDecrypt)
   {
     std::vector<ull> decryptedPieces;
@@ -264,31 +285,95 @@ namespace EncryptionSequence
     return decryptedData;
   }
 
+  // ----------
+
   void DoRSA()
   {
-    /*std::string inputNumber, foundNumber;
-    std::cout << "What Number Do You Want To Factor?\n:";
-    std::getline(std::cin, inputNumber);
+    std::string prime0, prime1;
+    std::cout << "Input First Prime\n:";
+    std::getline(std::cin, prime0);
+    std::cout << "Input Second Prime\n:";
+    std::getline(std::cin, prime1);
 
-    // parse the inputted number for only numbers
-    unsigned stringSize = inputNumber.size();
+    // parse the inputted primes for only numbers
+    unsigned stringSize = prime0.size();
+    std::string primeVal0;
     for (unsigned i = 0; i <= stringSize; ++i)
     {
-    if ((inputNumber[i] >= '0' && inputNumber[i] <= '9'))
+      if ((prime0[i] >= '0' && prime0[i] <= '9'))
+      {
+        primeVal0 += prime0[i];
+      }
+    }
+
+    stringSize = prime1.size();
+    std::string primeVal1;
+    for (unsigned i = 0; i <= stringSize; ++i)
     {
-    foundNumber += inputNumber[i];
-    }
+      if ((prime1[i] >= '0' && prime1[i] <= '9'))
+      {
+        primeVal1 += prime1[i];
+      }
     }
 
-    EncryptionSequence::PrimeFactor pFactor;
-    pFactor.FactorPrime(std::stoull(foundNumber), stringSize);*/
+    int pad = 2;
+    RSA cipher(std::stoull(primeVal0), std::stoull(primeVal1), pad);
+    int option = -1;
 
-    std::cout << "Testing RSA\n";
-    RSA(569, 991, 3);
+    while (option != 0)
+    {
+      system("cls");
+
+      std::cout << " ----------------------\n";
+      std::cout << "|  Encryption Options  |\n";
+      std::cout << " ----------------------\n";
+      std::cout << "| 0 : Return To Main   |\n";
+      std::cout << "| 1 : Run Cipher       |\n";
+      std::cout << " ----------------------\n";
+      std::cout << "| PRIME 0 : " << primeVal0 << std::endl;
+      std::cout << "| PRIME 1 : " << primeVal1 << std::endl;
+      std::cout << " ----------------------\n:";
+
+      std::string desiredTestValue;
+      std::getline(std::cin, desiredTestValue);
+      option = std::stoi(desiredTestValue);
+
+      switch (option)
+      {
+        case 0:
+          return;
+
+        case 1:
+        {
+          std::string inputData;
+          std::cout << "Input Data To Encrypt\n:";
+          std::getline(std::cin, inputData);
+
+          auto encryptResult = cipher.EncryptData(inputData);
+          unsigned size = encryptResult.size();
+          std::cout << "| ENCRYPT RESULTS PADDED AT " << pad << " DIGITS OF 2 |\n";
+          for (unsigned i = 0; i < size; ++i)
+          {
+            std::cout << encryptResult[i] << " | ";
+          }
+          std::cout << std::endl;
+
+          auto decryptResults = cipher.DecryptData(encryptResult);
+          std::cout << "| DECRYPT RESULTS |\n";
+          std::cout << decryptResults;
+
+          break;
+        }
+
+        default:
+          break;
+      }
+
+      std::cout << "\nPress Enter To Continue";
+      getchar();
+    }
 
     std::cout << "\nPress Enter To Continue";
     getchar();
   }
-
-  // ----------
 }
