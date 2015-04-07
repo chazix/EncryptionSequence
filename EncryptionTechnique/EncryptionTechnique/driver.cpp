@@ -1,11 +1,13 @@
 #include <iostream>
 #include <string>
+#include <ctime>
 
 #include "PrimeFactorization.h"
 #include "RSA.h"
 
 int main(int argc, char** argv)
 {
+  srand(time(0));
   int option = -1;
 
   while (option != 0)

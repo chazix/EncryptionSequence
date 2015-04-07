@@ -19,6 +19,7 @@ namespace EncryptionSequence
       
     private:
       ull CalculateGCD(ull a, ull b);
+      ull CalculatePow(ull a, ull p);
       ull DetermineValidPublicKey();
       ull DetermineValidPrivateKey();
       unsigned RetrieveDataValue(char data);
@@ -33,7 +34,7 @@ namespace EncryptionSequence
             - congruent modulo => encrypted_message == m^publicKey mod cryptMod
                 - note: at least 9 values of m will result in encrypted_message equal to m
       */
-      void EncryptData(byte** message);
+      void EncryptData(const std::string& toEncrypt);
       /*
         1) congruent modulo => decrypted_message == encrypted_message^privateKey mod cryptMod
         2) reverse the pad scheme

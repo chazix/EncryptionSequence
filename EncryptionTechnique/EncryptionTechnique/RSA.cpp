@@ -46,6 +46,18 @@ EncryptionSequence::ull EncryptionSequence::RSA::CalculateGCD(EncryptionSequence
   return a;
 }
 
+EncryptionSequence::ull EncryptionSequence::RSA::CalculatePow(EncryptionSequence::ull a, EncryptionSequence::ull p)
+{
+  EncryptionSequence::ull val = a;
+
+  for (EncryptionSequence::ull i = 1; i < p; ++i)
+  {
+    val *= a;
+  }
+
+  return val;
+}
+
 // [1 < publicKey < eulerTotient] && gcd(publicKey, eulerTotient) = 1
 EncryptionSequence::ull EncryptionSequence::RSA::DetermineValidPublicKey()
 {
@@ -157,7 +169,11 @@ EncryptionSequence::RSA::RSA(EncryptionSequence::ull prime0, EncryptionSequence:
   this->publicKey    = this->DetermineValidPublicKey();
   this->privateKey   = this->DetermineValidPrivateKey();
 
-  std::vector<EncryptionSequence::ull> testToNumbers = this->ParseToNumbers("Testing interesting sauces");
+  std::cout << "Test Pow\n";
+  std::cout << this->CalculatePow(2, 1) << std::endl;
+
+  std::cout << "Test Encrypt\n";
+  this->EncryptData("Testing Interesting Things");
 }
 
 /*
@@ -167,9 +183,16 @@ EncryptionSequence::RSA::RSA(EncryptionSequence::ull prime0, EncryptionSequence:
     - congruent modulo => encrypted_message == m^publicKey mod cryptMod
       - note: at least 9 values of m will result in encrypted_message equal to m
 */
-void EncryptionSequence::RSA::EncryptData(byte** message)
+void EncryptionSequence::RSA::EncryptData(const std::string& toEncrypt)
 {
+  std::vector<EncryptionSequence::ull> toCryptPieces = this->ParseToNumbers(toEncrypt);
+  std::vector<EncryptionSequence::ull> encryptedPieces;
 
+  for (auto& cryptPiece : toCryptPieces)
+  {
+    EncryptionSequence::ull crypt = this->CalculatePow(cryptPiece, this->publicKey) % this->cryptMod;
+    encryptedPieces.push_back(crypt);
+  }
 }
 
 void EncryptionSequence::DoRSA()
@@ -192,7 +215,7 @@ void EncryptionSequence::DoRSA()
   pFactor.FactorPrime(std::stoull(foundNumber), stringSize);*/
 
   std::cout << "Testing RSA\n";
-  RSA(569, 991, 6);
+  RSA(569, 991, 2);
 
   std::cout << "\nPress Enter To Continue";
   getchar();
