@@ -1,6 +1,7 @@
 #ifndef _RSA_H_INCLUDED_
 #define _RSA_H_INCLUDED_
 
+#include <stack>
 #include "PrimeFactorization.h"
 
 namespace EncryptionSequence
@@ -19,11 +20,14 @@ namespace EncryptionSequence
       
     private:
       ull CalculateGCD(ull a, ull b);
-      ull CalculatePow(ull a, ull p);
+      ull CalculateModularPow(const ull base, const ull exp, const ull mod);
       ull DetermineValidPublicKey();
       ull DetermineValidPrivateKey();
-      unsigned RetrieveDataValue(char data);
+      unsigned ByteDataValueToNum(const byte value);
+      byte NumValueToByteData(const unsigned value);
+
       std::vector<ull> ParseToNumbers(const std::string& data);
+      std::string ParseToData(const std::vector<ull>& decryptedData);
 
     public:
       RSA(ull prime0, ull prime1, int padScheme);
@@ -34,12 +38,12 @@ namespace EncryptionSequence
             - congruent modulo => encrypted_message == m^publicKey mod cryptMod
                 - note: at least 9 values of m will result in encrypted_message equal to m
       */
-      void EncryptData(const std::string& toEncrypt);
+      std::vector<ull> EncryptData(const std::string& toEncrypt);
       /*
         1) congruent modulo => decrypted_message == encrypted_message^privateKey mod cryptMod
         2) reverse the pad scheme
       */
-      void DecryptData(byte** message);
+      std::string DecryptData(const std::vector<ull>& toDecrypt);
   };
 
   void DoRSA();
