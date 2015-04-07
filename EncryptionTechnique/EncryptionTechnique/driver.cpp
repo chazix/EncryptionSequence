@@ -2,6 +2,7 @@
 #include <string>
 
 #include "PrimeFactorization.h"
+#include "RSA.h"
 
 int main(int argc, char** argv)
 {
@@ -32,7 +33,10 @@ int main(int argc, char** argv)
       }
 
       case (2) :
+      {
+        EncryptionSequence::DoRSA();
         break;
+      }
 
       case (3) :
         break;
