@@ -3,7 +3,7 @@
 
   \brief
     This utilizes the RSA algorithm for encrypting and decryption std::string
-    data
+    data.
  */
 
 #include <iostream>
@@ -104,18 +104,18 @@ namespace EncryptionSequence
     {
       if (value == dataValues[i])
       {
-        return i;
+        return i + 1;
       }
     }
 
     // return the unknown character index
-    return sizeOfDataValues - 1;
+    return sizeOfDataValues;// - 1; // since we have + 1 modifier we don't need the - 1
   }
 
   byte RSA::NumValueToByteData(const unsigned value)
   {
     // might want to mod value by the sizeOfDataValues to avoid a potential crash
-    return dataValues[value];
+    return dataValues[value - 1];
   }
 
   // parses to numbers of length padScheme

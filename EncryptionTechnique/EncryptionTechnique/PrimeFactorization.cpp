@@ -1,3 +1,21 @@
+/*!
+  \author Chase Hutchens
+
+  \brief
+    This will attempt to locate 2 prime factors of a larger prime number.
+    The discrepancy with this method is the prime factors must be in the range
+    of the 2 <= factor <= ceil(goldenRatio * sqrt(largePrime)). The reason I chose
+    to scale by the goldenRatio is because I feel the golden ratio and
+    prime numbers go hand in hand.
+
+    Example Values :
+        FAST CALCULATION
+          25450261 = 5087 * 5003
+
+        LONGER CALCULATION
+          3574406403731 = 2750159 * 1299709
+*/
+
 #include <iostream>
 #include <sstream>
 #include <string>
