@@ -65,10 +65,6 @@ namespace EncryptionSequence
     ull val = 1;
     ull n_base = base % mod;
     ull c_exp = exp;
-    /*for (ull e = 1; e <= exp; ++e)
-    {
-      val = (val * base) % mod;
-    }*/
 
     while (c_exp > 0)
     {
@@ -383,7 +379,7 @@ namespace EncryptionSequence
           //get and output encrypted data
           auto encryptResult = cipher.EncryptData(inputData);
           size = encryptResult.size();
-          std::cout << "| ENCRYPT RESULTS PADDED AT " << pad << " DIGITS OF 2 |\n";
+          std::cout << "| ENCRYPT RESULTS |\n";
           for (unsigned i = 0; i < size; ++i)
           {
             std::cout << encryptResult[i] << " | ";
