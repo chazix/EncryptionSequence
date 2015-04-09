@@ -2,10 +2,11 @@
 #define _PRIME_FACTORIZATION_H_INCLUDED_
 
 #include <vector>
+#include <cstdint>
 
 namespace EncryptionSequence
 {
-  typedef unsigned long long ull;
+  typedef uint64_t ull;
 
   class PrimeFactor
   {

@@ -59,12 +59,26 @@ namespace EncryptionSequence
   }
 
   // http://en.wikipedia.org/wiki/Modular_exponentiation
+  // Right-to-left binary method
   ull RSA::CalculateModularPow(const ull base, const ull exp, const ull mod)
   {
     ull val = 1;
-    for (ull e = 1; e <= exp; ++e)
+    ull n_base = base % mod;
+    ull c_exp = exp;
+    /*for (ull e = 1; e <= exp; ++e)
     {
       val = (val * base) % mod;
+    }*/
+
+    while (c_exp > 0)
+    {
+      if (c_exp % 2 == 1)
+      {
+        val = (val * n_base) % mod;
+      }
+
+      c_exp = c_exp >> 1;
+      n_base = (n_base * n_base) % mod;
     }
 
     return val;
@@ -316,7 +330,7 @@ namespace EncryptionSequence
       }
     }
 
-    int pad = 2;
+    int pad = 3;
     RSA cipher(std::stoull(primeVal0), std::stoull(primeVal1), pad);
     int option = -1;
 
