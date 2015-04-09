@@ -33,11 +33,15 @@ namespace EncryptionSequence
       unsigned ByteDataValueToNum(const byte value);
       byte NumValueToByteData(const unsigned value);
 
-      std::vector<ull> ParseToNumbers(const std::string& data);
       std::string ParseToData(const std::vector<ull>& decryptedData);
 
     public:
       RSA(const ull prime0, const ull prime1, const int padScheme);
+      /*
+        process message into individual bytes of length padScheme
+        - M into m => [0 <= m < cryptMod]
+      */
+      std::vector<ull> ParseToNumbers(const std::string& data);
       /*
         1) process message into individual bytes of length padScheme
             - M into m => [0 <= m < cryptMod]

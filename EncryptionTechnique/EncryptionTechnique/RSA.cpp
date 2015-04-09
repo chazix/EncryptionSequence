@@ -281,6 +281,7 @@ namespace EncryptionSequence
     return encryptedPieces;
   }
 
+  
   /*
     1) congruent modulo => decrypted_message == encrypted_message^privateKey mod cryptMod
     2) reverse the pad scheme
@@ -303,6 +304,8 @@ namespace EncryptionSequence
 
   void DoRSA()
   {
+    std::cout << std::string(23, '=') << std::endl;
+
     std::string prime0, prime1;
     std::cout << "Input First Prime\n:";
     std::getline(std::cin, prime0);
@@ -352,6 +355,7 @@ namespace EncryptionSequence
       std::getline(std::cin, desiredTestValue);
       option = std::stoi(desiredTestValue);
 
+      std::cout << std::string(23, '=') << std::endl;
       switch (option)
       {
         case 0:
@@ -363,8 +367,22 @@ namespace EncryptionSequence
           std::cout << "Input Data To Encrypt\n:";
           std::getline(std::cin, inputData);
 
+          std::cout << std::string(23, '=') << std::endl;
+
+          //output unencrypted data
+          auto unencryptedData = cipher.ParseToNumbers(inputData);
+          unsigned size = unencryptedData.size();
+          std::cout << "| UNENCRYPTED INPUT DATA PADDED AT " << pad << " DIGITS OF 2 |\n";
+          for (unsigned i = 0; i < size; ++i)
+          {
+              std::cout << unencryptedData[i] << " | ";
+          }
+          std::cout << std::endl;
+
+          std::cout << std::string(23, '=') << std::endl;
+          //get and output encrypted data
           auto encryptResult = cipher.EncryptData(inputData);
-          unsigned size = encryptResult.size();
+          size = encryptResult.size();
           std::cout << "| ENCRYPT RESULTS PADDED AT " << pad << " DIGITS OF 2 |\n";
           for (unsigned i = 0; i < size; ++i)
           {
@@ -372,9 +390,12 @@ namespace EncryptionSequence
           }
           std::cout << std::endl;
 
+          std::cout << std::string(23, '=') << std::endl;
+
           auto decryptResults = cipher.DecryptData(encryptResult);
           std::cout << "| DECRYPT RESULTS |\n";
-          std::cout << decryptResults;
+          std::cout << decryptResults << std::endl;
+          std::cout << std::string(23, '=') << std::endl;
 
           break;
         }
