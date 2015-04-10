@@ -41,28 +41,28 @@ void EncryptionSequence::PrimeFactor::DeterminePrimes(const ull thePrime)
     ull checkPrime = prime;
 
     // p''
-    ull startPrime = static_cast<ull>(ceil(goldenRatio * sqrt(checkPrime)));
+    ull comparison = static_cast<ull>(ceil(goldenRatio * sqrt(checkPrime)));
     // make sure the startPrime isn't the same as the base prime we're checking against
-    startPrime = startPrime == prime ? startPrime - 1 : startPrime;
+    comparison = comparison == prime ? comparison - 1 : comparison;
     bool validPrime = false;
 
     // determine what is prime
-    while (checkPrime % startPrime != 0)
+    while (checkPrime % comparison != 0)
     {
-      --startPrime;
+      --comparison;
       // make sure the startPrime isn't the same as the checkPrime we're comparing
       // the startPrime might initially be greater than the checkPrime
       // (kind of messy)
-      startPrime = startPrime == checkPrime ? startPrime - 1 : startPrime;
+      comparison = comparison == checkPrime ? comparison - 1 : comparison;
 
-      if (startPrime == 1)
+      if (comparison == 1)
       {
         validPrime = true;
         break;
       }
     }
 
-    if (validPrime || startPrime == 1)
+    if (validPrime || comparison == 1)
     {
       this->primes.push_back(checkPrime);
     }
