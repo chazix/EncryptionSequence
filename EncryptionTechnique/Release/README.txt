@@ -1,3 +1,4 @@
+  1) Open Up EncryptionTechnique.exe  
   => Upon Opening The Program You Are Greeted With The Following Menu :
  
  ----------------------
