@@ -266,8 +266,9 @@ namespace EncryptionSequence
   std::vector<ull> RSA::EncryptData(const std::string& toEncrypt)
   {
     std::vector<ull> toCryptPieces = this->ParseToNumbers(toEncrypt);
-    std::vector<ull> encryptedPieces;
 
+
+    std::vector<ull> encryptedPieces;
     for (auto& cryptPiece : toCryptPieces)
     {
       ull crypt = this->CalculateModularPow(cryptPiece, this->publicKey, this->cryptMod);
@@ -329,7 +330,7 @@ namespace EncryptionSequence
       }
     }
 
-    int pad = 3;
+    int pad = 2;
     RSA cipher(std::stoull(primeVal0), std::stoull(primeVal1), pad);
     int option = -1;
 

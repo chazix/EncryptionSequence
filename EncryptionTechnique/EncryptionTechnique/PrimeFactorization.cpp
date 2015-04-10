@@ -2,7 +2,7 @@
   \author Chase Hutchens
 
   \brief
-    This will attempt to locate 2 prime factors of a larger prime number.
+    This will attempt to locate 2 prime factors of a larger number.
     The discrepancy with this method is the prime factors must be in the range
     of the 2 <= factor <= ceil(goldenRatio * sqrt(largePrime)). The reason I chose
     to scale by the goldenRatio is because I feel the golden ratio and
@@ -26,14 +26,21 @@ static const double goldenRatio = (1.0 + sqrt(5)) / 2.0;
 
 // PRIVATE
 
+/*!
+  \param thePrime
+    This is our 'F' number that we are trying to prime factor
+*/
 void EncryptionSequence::PrimeFactor::DeterminePrimes(const ull thePrime)
 {
+  // initial p'
   ull prime = static_cast<ull>(ceil(goldenRatio * sqrt(thePrime)));
 
   while (prime > 1)
   {
+    // p'
     ull checkPrime = prime;
 
+    // p''
     ull startPrime = static_cast<ull>(ceil(goldenRatio * sqrt(checkPrime)));
     // make sure the startPrime isn't the same as the base prime we're checking against
     startPrime = startPrime == prime ? startPrime - 1 : startPrime;
