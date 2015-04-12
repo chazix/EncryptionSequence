@@ -7,26 +7,12 @@
 | 0 : Exit             |
 | 1 : Factor Prime     |
 | 2 : RSA Encryption   |
+| 3 : Crack RSA Key    |
  ----------------------
-: 
+:2
 
-1) Input 0, 1 or 2 and press enter
-2) Follow through either Choosing Option 1 Example, or Choosing Option 2 Example bellow
-
- ---------------------------
-| Choosing Option 1 Example |
- ---------------------------
-Factoring => 25450261
-----------------------------
-: What Number Do You Want To Factor?
-: 25450261
-Found : 1024 Primes That May Make Up 25450261
-
-Found Prime Factors : [p] = 5087 | [q] = 5003
-Time Taken To Factor Prime : 0 seconds
-
-Press Enter To Continue
---------------------------
+1) Input 2 and press enter
+2) Follow through Choosing Option 2 Example bellow for RSA Encryption
 
  ---------------------------
 | Choosing Option 2 Example |

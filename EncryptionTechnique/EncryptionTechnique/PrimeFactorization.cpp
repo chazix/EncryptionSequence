@@ -127,6 +127,9 @@ void EncryptionSequence::PrimeFactor::FactorPrime(const ull toFactorPrime, const
         time(&endTime);
         double timeTaken = difftime(endTime, startTime);
 
+        P = prime;
+        Q = this->primes[j];
+
         std::cout << "\nFound Prime Factors : [p] = " << prime << " | [q] = " << this->primes[j] << std::endl;
         std::cout << "Time Taken To Factor Prime : " << timeTaken << " seconds" << std::endl;
 
@@ -134,7 +137,8 @@ void EncryptionSequence::PrimeFactor::FactorPrime(const ull toFactorPrime, const
       }
     }
   }
-
+  P = 0;
+  Q = 0;
   std::cout << "\nFound : No Two Primes That Make Up : " << toFactorPrime << std::endl;
 }
 

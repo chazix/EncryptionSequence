@@ -67,6 +67,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,10 +80,12 @@
     <ClCompile Include="driver.cpp" />
     <ClCompile Include="PrimeFactorization.cpp" />
     <ClCompile Include="RSA.cpp" />
+    <ClCompile Include="RSACrack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PrimeFactorization.h" />
     <ClInclude Include="RSA.h" />
+    <ClInclude Include="RSACrack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

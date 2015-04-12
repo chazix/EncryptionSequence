@@ -17,6 +17,7 @@ namespace EncryptionSequence
 
     public:
       void FactorPrime(const ull toFactorPrime, const int charLen = 0);
+      ull P, Q;
   };
 
   // Implementation of the PrimeFactor Behavior

@@ -4,6 +4,7 @@
 
 #include "PrimeFactorization.h"
 #include "RSA.h"
+#include "RSACrack.h"
 
 int main(int argc, char** argv)
 {
@@ -18,6 +19,7 @@ int main(int argc, char** argv)
     std::cout << "| 0 : Exit             |\n";
     std::cout << "| 1 : Factor Prime     |\n";
     std::cout << "| 2 : RSA Encryption   |\n";
+    std::cout << "| 3 : Crack RSA Key    |\n";
     std::cout << " ----------------------\n: ";
 
     std::string desiredTestValue;
@@ -39,6 +41,9 @@ int main(int argc, char** argv)
         break;
       }
 
+      case(3) :
+        EncryptionSequence::CrackRSA();
+        break;
       default:
         break;
     }
